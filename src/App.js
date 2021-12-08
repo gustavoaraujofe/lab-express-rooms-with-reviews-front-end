@@ -11,6 +11,7 @@ import ListRoomsUser from "./pages/ListRoomsUser";
 import EditRoom from "./pages/EditRoom";
 import ViewRoom from "./pages/ViewRoom";
 import Navbar from "./components/Navbar";
+import ProtectedRoute from "./pages/auth/ProtectRoute";
 
 function App() {
   return (
@@ -19,14 +20,29 @@ function App() {
         <Navbar />
         <div className="container w-100">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<ProtectedRoute component={Home} />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/edit-user" element={<EditUser />} />
-            <Route path="/create-room" element={<CreateRoom />} />
-            <Route path="/list-rooms" element={<ListRoomsUser />} />
-            <Route path="/edit-room/:id" element={<EditRoom />} />
-            <Route path="/view-room/:id" element={<ViewRoom />} />
+            <Route
+              path="/edit-user"
+              element={<ProtectedRoute component={EditUser} />}
+            />
+            <Route
+              path="/create-room"
+              element={<ProtectedRoute component={CreateRoom} />}
+            />
+            <Route
+              path="/list-rooms"
+              element={<ProtectedRoute component={ListRoomsUser} />}
+            />
+            <Route
+              path="/edit-room/:id"
+              element={<ProtectedRoute component={EditRoom} />}
+            />
+            <Route
+              path="/view-room/:id"
+              element={<ProtectedRoute component={ViewRoom} />}
+            />
           </Routes>
         </div>
       </AuthContextComponent>

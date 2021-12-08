@@ -65,8 +65,8 @@ function Signup() {
   }
 
   return (
-    <div>
-      <h1>Editar cadastro</h1>
+    <div className="w-50 d-flex flex-column m-auto">
+      <h1 className="text-center mt-5 mb-4">Editar cadastro</h1>
 
       <form onSubmit={handleSubmit}>
         <FormField
@@ -113,7 +113,7 @@ function Signup() {
           readOnly={loading}
         />
 
-        <div className="mb-3">
+        <div className="mb-3 text-end">
           <button disabled={loading} type="submit" className="btn btn-primary">
             {loading ? (
               <span

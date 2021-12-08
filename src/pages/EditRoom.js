@@ -81,8 +81,8 @@ function Signup() {
   }
 
   return (
-    <div>
-      <h1>Editar quarto</h1>
+    <div className="w-50 d-flex flex-column m-auto">
+      <h1 className="text-center mt-5 mb-4">Editar quarto</h1>
 
       <form onSubmit={handleSubmit}>
         <FormField

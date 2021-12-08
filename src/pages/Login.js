@@ -37,18 +37,17 @@ function Login() {
         userData
       );
 
-      setLoggedInUser({token: response.data.token, user: response.data.user});
+      setLoggedInUser({ token: response.data.token, user: response.data.user });
 
       // Gravando o token de usuário logado no computador do usuário
       localStorage.setItem(
         "loggedInUser",
-        JSON.stringify({ token: response.data.token, user: response.data.user})
+        JSON.stringify({ token: response.data.token, user: response.data.user })
       );
 
       setLoading(false);
-      
+
       navigate("/");
-      
     } catch (err) {
       setLoading(false);
       console.error(err);
@@ -60,10 +59,10 @@ function Login() {
   }
 
   return (
-    <div>
-      <h1>Entrar na sua conta</h1>
+    <div className="w-50 d-flex flex-column m-auto">
+      <h1 className="text-center mt-5 mb-4">Entrar na sua conta</h1>
 
-      <form onSubmit={handleSubmit}>
+      <form className="w-75 m-auto" onSubmit={handleSubmit}>
         <FormField
           type="email"
           label="E-mail"

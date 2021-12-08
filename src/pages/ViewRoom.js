@@ -15,8 +15,15 @@ function ViewRoom() {
     comment: "",
     roomId: "",
   });
+  const [editComment, setEditComment] = useState({
+    comment: "",
+    roomId: "",
+  });
   const [error, setError] = useState(null);
   const [userName, setUserName] = useState("");
+  const [optionEdit, setOptionEdit] = useState(false);
+  const [idCommentEdit, setIdCommentEdit] = useState("");
+  const [refresh, setRefresh] = useState(false);
 
   const [comments, setComments] = useState([]);
   const params = useParams();
@@ -47,7 +54,7 @@ function ViewRoom() {
       }
     }
     room();
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     function commentsAdd() {
@@ -67,9 +74,8 @@ function ViewRoom() {
   async function deleteComment(id) {
     try {
       const response = await api.delete(`/room/delete-review/${id}`);
-
       console.log(response);
-      window.location.reload();
+      setRefresh(!refresh);
     } catch (e) {
       console.log(e);
     }
@@ -79,16 +85,43 @@ function ViewRoom() {
     setNewComment({ roomId: params.id, [e.target.name]: e.target.value });
   }
 
+  function handleChangeEdit(e) {
+    setEditComment({ roomId: params.id, [e.target.name]: e.target.value });
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     try {
       const response = await api.post("/room/create-review", newComment);
       console.log(response);
-      window.location.reload();
+      setRefresh(!refresh);
+      setNewComment({ comment: "" });
     } catch (e) {
       setError(true);
       console.log(e);
     }
+  }
+
+  async function handleSubmitEdit(e) {
+    e.preventDefault();
+    try {
+      const response = await api.patch(
+        `/room/edit-review/${idCommentEdit}`,
+        editComment
+      );
+      console.log(response);
+      setOptionEdit(false);
+      setRefresh(!refresh);
+      setEditComment({ comment: "" });
+    } catch (e) {
+      setError(true);
+      console.log(e);
+    }
+  }
+
+  function EditComment(id) {
+    setOptionEdit(!optionEdit);
+    setIdCommentEdit(id);
   }
 
   return (
@@ -113,12 +146,49 @@ function ViewRoom() {
                     {currentComment.comment}
                   </p>
                   {userName === currentComment.name ? (
-                    <button
-                      onClick={() => deleteComment(currentComment.id)}
-                      className="btn btn-danger mt-4"
-                    >
-                      Delete
-                    </button>
+                    <>
+                      <button
+                        className="btn "
+                        onClick={() => EditComment(currentComment.id)}
+                      >
+                        Editar
+                      </button>
+                      {optionEdit ? (
+                        <div>
+                          <form className="mt-4" onSubmit={handleSubmitEdit}>
+                            <div className="form-group h5">
+                              <label htmlFor="exampleFormControlTextarea1">
+                                Alterar
+                              </label>
+                              <textarea
+                                className="form-control"
+                                name="comment"
+                                id="exampleFormControlTextarea1"
+                                rows="3"
+                                onChange={handleChangeEdit}
+                                value={editComment.comment}
+                              ></textarea>
+                              <div className="mt-2">
+                                <button
+                                  className="btn btn-primary "
+                                  type="submit"
+                                >
+                                  Confirmar alteração
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    deleteComment(currentComment.id)
+                                  }
+                                  className="btn btn-danger ms-2"
+                                >
+                                  Deletar
+                                </button>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      ) : null}
+                    </>
                   ) : null}
                 </div>
               );
@@ -140,9 +210,7 @@ function ViewRoom() {
                 Enviar
               </button>
               {error ? (
-                <ErrorAlert>
-                  Você não pode comentar em seu anúncio
-                </ErrorAlert>
+                <ErrorAlert>Você não pode comentar em seu anúncio</ErrorAlert>
               ) : null}
             </div>
           </form>
