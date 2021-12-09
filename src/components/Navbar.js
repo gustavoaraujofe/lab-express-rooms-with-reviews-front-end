@@ -23,7 +23,7 @@ function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
-        <p className="m-auto h5 text-light">Ironshop</p>
+        <p className="m-auto h5 text-light">IronRooms</p>
         <button
           className="navbar-toggler"
           type="button"
